@@ -1,4 +1,4 @@
-
+theme = Atom One Dark
 
 # This is the configuration file for Ghostty.
 #
@@ -47,7 +47,9 @@
 font-size = 14
 
 # theme = GruvBoxDarkHard
-keybind = cmd+w=close_window
+keybind = cmd+w=close_surface
 keybind = cmd+q=close_tab
 keybind = cmd+s>r=reload_config
 keybind = cmd+s>n=new_tab
+keybind = cmd+shift+d=close_surface
+keybind = cmd+f=write_scrollback_file:open
