@@ -20,4 +20,6 @@ _darcs
 ^/LICENSE.*
 ^/COPYING
 ^/CLAUDE.md
+^/install.sh
 ^/guide
+^/Library
