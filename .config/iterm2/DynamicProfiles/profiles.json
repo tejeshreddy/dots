@@ -6,6 +6,7 @@
       "Guid" : "14B6EA6B-5736-47E2-9A57-DB972054023C",
       "Name" : "Work",
       "Cursor Type" : 1,
+      "Normal Font" : "Monaco 14",
       "Keyboard Map" : {
         "0x7f-0x80000" : {
           "Action" : 11,
