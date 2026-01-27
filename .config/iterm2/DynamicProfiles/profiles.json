@@ -1,11 +1,63 @@
 {
   "Profiles" : [
     {
-      "Use Separate Colors for Light and Dark Mode" : true,
+      "Blinking Cursor" : true,
       "Rewritable" : true,
-      "Name" : "Default",
       "Guid" : "14B6EA6B-5736-47E2-9A57-DB972054023C",
-      "Window Type" : 0
+      "Name" : "Work",
+      "Cursor Type" : 1,
+      "Keyboard Map" : {
+        "0x7f-0x80000" : {
+          "Action" : 11,
+          "Text" : "0x17"
+        },
+        "0x7f-0x100000" : {
+          "Action" : 11,
+          "Text" : "0x15"
+        },
+        "0xf728-0x80000" : {
+          "Action" : 10,
+          "Text" : "d"
+        },
+        "0xf728-0x100000" : {
+          "Action" : 11,
+          "Text" : "0x0b"
+        },
+        "0xf702-0x80000" : {
+          "Action" : 10,
+          "Text" : "b"
+        },
+        "0xf703-0x80000" : {
+          "Action" : 10,
+          "Text" : "f"
+        }
+      },
+      "Use Separate Colors for Light and Dark Mode" : true,
+      "Show Status Bar" : true,
+      "Status Bar Layout" : {
+        "advanced configuration" : {
+          "font" : ".AppleSystemUIFont 12"
+        },
+        "algorithm" : 0,
+        "components" : [
+          {
+            "class" : "iTermStatusBarCPUUtilizationComponent",
+            "configuration" : {
+              "knobs" : {
+                "base: priority" : 5
+              }
+            }
+          },
+          {
+            "class" : "iTermStatusBarSearchFieldComponent",
+            "configuration" : {
+              "knobs" : {
+                "base: priority" : 5
+              }
+            }
+          }
+        ]
+      }
     }
   ]
 }
