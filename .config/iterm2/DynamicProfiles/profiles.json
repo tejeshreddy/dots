@@ -1,0 +1,11 @@
+{
+  "Profiles" : [
+    {
+      "Use Separate Colors for Light and Dark Mode" : true,
+      "Rewritable" : true,
+      "Name" : "Default",
+      "Guid" : "14B6EA6B-5736-47E2-9A57-DB972054023C",
+      "Window Type" : 0
+    }
+  ]
+}

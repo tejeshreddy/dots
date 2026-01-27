@@ -27,13 +27,16 @@ stow -D .
 
 - `.config/` - XDG config directory containing application configs
   - `ghostty/config` - Ghostty terminal emulator configuration
+  - `iterm2/DynamicProfiles/profiles.json` - iTerm2 Dynamic Profiles (symlinked by install.sh)
 - `.zshrc` - Zsh configuration
 - `.stow-local-ignore` - Patterns for stow to ignore (VCS files, READMEs, etc.)
+- `install.sh` - Installation script for new machines
 - `guide/` - Documentation and setup guides (not symlinked)
 
 ## Guides
 
 Refer to the `guide/` folder for detailed instructions:
+- `guide/installation.md` - How to install dotfiles on a new machine
 - `guide/stow-setup.md` - How to add new configs and common stow commands
 
 When performing a new process or workflow, check if a guide exists in `guide/`. If not, create one with the basic commands used.
