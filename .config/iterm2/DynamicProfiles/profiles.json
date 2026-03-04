@@ -31,6 +31,14 @@
         "0xf703-0x80000" : {
           "Action" : 10,
           "Text" : "f"
+        },
+        "0xf702-0xa0000" : {
+          "Action" : 10,
+          "Text" : "[1;4D"
+        },
+        "0xf703-0xa0000" : {
+          "Action" : 10,
+          "Text" : "[1;4C"
         }
       },
       "Use Separate Colors for Light and Dark Mode" : true,
