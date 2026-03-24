@@ -208,3 +208,4 @@ export PATH="$HOME/.local/bin:$PATH"
 [[ -f ~/.zsh_secrets ]] && source ~/.zsh_secrets
 
 export PATH="$PATH:$HOME/go/bin"
+export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"

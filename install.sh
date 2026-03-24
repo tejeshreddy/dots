@@ -37,6 +37,7 @@ backup_if_exists() {
 echo "Checking for existing files..."
 backup_if_exists "$HOME/.zshrc"
 backup_if_exists "$HOME/.config/ghostty/config"
+backup_if_exists "$HOME/.config/wezterm/wezterm.lua"
 
 # Create parent directories if needed
 mkdir -p "$HOME/.config"
@@ -56,12 +57,30 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "iTerm2 Dynamic Profiles symlinked"
 fi
 
+# Tmux plugins
+echo "Installing tmux plugins..."
+mkdir -p "$HOME/.config/tmux/plugins/catppuccin"
+mkdir -p "$HOME/.config/tmux/plugins/tmux-plugins"
+
+if [[ ! -d "$HOME/.config/tmux/plugins/catppuccin/tmux" ]]; then
+    git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$HOME/.config/tmux/plugins/catppuccin/tmux"
+fi
+if [[ ! -d "$HOME/.config/tmux/plugins/tmux-plugins/tmux-cpu" ]]; then
+    git clone https://github.com/tmux-plugins/tmux-cpu "$HOME/.config/tmux/plugins/tmux-plugins/tmux-cpu"
+fi
+if [[ ! -d "$HOME/.config/tmux/plugins/tmux-plugins/tmux-battery" ]]; then
+    git clone https://github.com/tmux-plugins/tmux-battery "$HOME/.config/tmux/plugins/tmux-plugins/tmux-battery"
+fi
+
 echo ""
 echo "Done! Dotfiles installed successfully."
 echo ""
 echo "Installed:"
 echo "  - .zshrc"
 echo "  - .config/ghostty/config"
+echo "  - .config/wezterm/wezterm.lua"
+echo "  - .tmux.conf"
+echo "  - tmux plugins (catppuccin, tmux-cpu, tmux-battery)"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "  - iTerm2 Dynamic Profiles"
 fi
