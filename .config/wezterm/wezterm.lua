@@ -123,4 +123,50 @@ config.keys = {
   },
 }
 
+local cpu_samples = {}
+
+wezterm.on("update-right-status", function(window, pane)
+  local ok, err = pcall(function()
+    local cwd = pane:get_current_working_dir()
+    local path = cwd and cwd.file_path or ""
+    path = path:gsub(os.getenv("HOME"), "~")
+
+    -- CPU
+    local cpu_ok, cpu_out = wezterm.run_child_process({ "sh", "-c",
+      "ps -A -o %cpu | awk 'NR>1{s+=$1} END{printf \"%.0f\",s}'"
+    })
+    local ncpu_ok, ncpu_out = wezterm.run_child_process({ "sysctl", "-n", "hw.logicalcpu" })
+    local ncpu = ncpu_ok and (tonumber(ncpu_out) or 1) or 1
+    local sample = cpu_ok and math.floor((tonumber(cpu_out) or 0) / ncpu) or 0
+
+    local now = os.time()
+    table.insert(cpu_samples, { t = now, v = sample })
+    local kept, sum = {}, 0
+    for _, e in ipairs(cpu_samples) do
+      if now - e.t <= 10 then table.insert(kept, e); sum = sum + e.v end
+    end
+    cpu_samples = kept
+    local pct = #kept > 0 and math.floor(sum / #kept) or 0
+    local cpu_color = pct > 80 and "#f7768e" or pct > 50 and "#e0af68" or "#9ece6a"
+    local bar = ({"▁","▂","▃","▄","▅","▆","▇","█"})[math.max(1, math.min(8, math.floor(pct/100*8)+1))]
+
+    -- Git branch
+    local branch = ""
+    local git_ok, bout = wezterm.run_child_process({ "git", "-C", cwd and cwd.file_path or ".", "rev-parse", "--abbrev-ref", "HEAD" })
+    if git_ok then branch = " \u{e0a0} " .. bout:gsub("%s+$", "") end
+
+    window:set_right_status(wezterm.format({
+      { Foreground = { Color = cpu_color } },
+      { Text = " CPU " .. bar .. " " .. pct .. "% " },
+      { Foreground = { Color = "#565f89" } },
+      { Text = path },
+      { Foreground = { Color = "#7aa2f7" } },
+      { Text = branch .. " " },
+    }))
+  end)
+  if not ok then
+    window:set_right_status("error: " .. tostring(err))
+  end
+end)
+
 return config
