@@ -4,12 +4,12 @@ local config = wezterm.config_builder()
 -- General
 config.font = wezterm.font("BlexMono Nerd Font Mono")
 config.line_height = 1.2
-config.font_size = 16
-config.color_scheme = "tokyonight_night"
+config.font_size = 15.5
+config.color_scheme = "Dracula"
 
 config.colors = {
-  cursor_bg = "#7aa2f7",
-  cursor_border = "#7aa2f7",
+  cursor_bg = "#f8f8f2",
+  cursor_border = "#f8f8f2",
 }
 
 config.window_decorations = "TITLE | RESIZE"
@@ -50,6 +50,7 @@ config.audible_bell = "Disabled"
 -- config.initial_rows = 50
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
+config.enable_kitty_keyboard = true
 -- config.hide_tab_bar_if_only_one_tab = true
 -- config.use_fancy_tab_bar = false
 -- config.scrollback_lines = 10000
@@ -87,6 +88,10 @@ config.keys = {
   { key = 'l', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Right' },
   { key = 'k', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Up' },
   { key = 'j', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Down' },
+  { key = 'LeftArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Left' },
+  { key = 'RightArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Right' },
+  { key = 'UpArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Up' },
+  { key = 'DownArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Down' },
   -- Delete to start of line
   {
     key = 'Backspace',
@@ -110,6 +115,11 @@ config.keys = {
     action = wezterm.action.SendString 'clear\n',
   },
   {
+    key = 'Enter',
+    mods = 'SHIFT',
+    action = wezterm.action.SendString '\x1b[13;2u',
+  },
+  {
     key = 'e',
     mods = 'CMD|SHIFT',
     action = wezterm.action.PromptInputLine {
@@ -124,6 +134,14 @@ config.keys = {
 }
 
 local cpu_samples = {}
+
+wezterm.on("open-uri", function(window, pane, uri)
+  if uri:match("^file://") then
+    local path = uri:gsub("^file://", "")
+    wezterm.run_child_process({ "code", path })
+    return false
+  end
+end)
 
 wezterm.on("update-right-status", function(window, pane)
   local ok, err = pcall(function()
@@ -168,5 +186,13 @@ wezterm.on("update-right-status", function(window, pane)
     window:set_right_status("error: " .. tostring(err))
   end
 end)
+
+config.mouse_bindings = {
+  {
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = "CMD",
+    action = wezterm.action.OpenLinkAtMouseCursor,
+  },
+}
 
 return config
