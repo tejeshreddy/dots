@@ -198,8 +198,14 @@ gtr() {
             ( cd "$dir" && claude )
             ;;
 
+        pick)
+            local selected
+            selected=$(git worktree list | tail -n +2 | fzf --prompt="worktree> " | awk '{print $1}')
+            [ -n "$selected" ] && cd "$selected"
+            ;;
+
         *)
-            echo "Unknown sub-command: $cmd (use create, rm, cd, ls, claude)"; return 1;;
+            echo "Unknown sub-command: $cmd (use create, rm, cd, ls, claude, pick)"; return 1;;
     esac
 }
 
@@ -209,3 +215,8 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
+
+# WezTerm shell integration (tracks cwd for status bar)
+[[ "$TERM_PROGRAM" == "WezTerm" ]] && source "/Applications/WezTerm.app/Contents/Resources/wezterm.sh"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

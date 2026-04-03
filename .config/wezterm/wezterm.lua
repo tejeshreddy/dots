@@ -50,7 +50,6 @@ config.audible_bell = "Disabled"
 -- config.initial_rows = 50
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
-config.enable_kitty_keyboard = true
 -- config.hide_tab_bar_if_only_one_tab = true
 -- config.use_fancy_tab_bar = false
 -- config.scrollback_lines = 10000
@@ -92,6 +91,11 @@ config.keys = {
   { key = 'RightArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Right' },
   { key = 'UpArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Up' },
   { key = 'DownArrow', mods = 'CMD|OPT', action = wezterm.action.ActivatePaneDirection 'Down' },
+  { key = 'PageUp', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
+  { key = 'PageDown', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
+  { key = 'LeftArrow', mods = 'CMD|SHIFT', action = wezterm.action.ActivateTabRelative(-1) },
+  { key = 'RightArrow', mods = 'CMD|SHIFT', action = wezterm.action.ActivateTabRelative(1) },
+  { key = 'f', mods = 'CMD|SHIFT', action = wezterm.action.ShowTabNavigator },
   -- Delete to start of line
   {
     key = 'Backspace',
@@ -135,14 +139,6 @@ config.keys = {
 
 local cpu_samples = {}
 
-wezterm.on("open-uri", function(window, pane, uri)
-  if uri:match("^file://") then
-    local path = uri:gsub("^file://", "")
-    wezterm.run_child_process({ "code", path })
-    return false
-  end
-end)
-
 wezterm.on("update-right-status", function(window, pane)
   local ok, err = pcall(function()
     local cwd = pane:get_current_working_dir()
@@ -168,18 +164,9 @@ wezterm.on("update-right-status", function(window, pane)
     local cpu_color = pct > 80 and "#f7768e" or pct > 50 and "#e0af68" or "#9ece6a"
     local bar = ({"▁","▂","▃","▄","▅","▆","▇","█"})[math.max(1, math.min(8, math.floor(pct/100*8)+1))]
 
-    -- Git branch
-    local branch = ""
-    local git_ok, bout = wezterm.run_child_process({ "git", "-C", cwd and cwd.file_path or ".", "rev-parse", "--abbrev-ref", "HEAD" })
-    if git_ok then branch = " \u{e0a0} " .. bout:gsub("%s+$", "") end
-
     window:set_right_status(wezterm.format({
       { Foreground = { Color = cpu_color } },
       { Text = " CPU " .. bar .. " " .. pct .. "% " },
-      { Foreground = { Color = "#565f89" } },
-      { Text = path },
-      { Foreground = { Color = "#7aa2f7" } },
-      { Text = branch .. " " },
     }))
   end)
   if not ok then
